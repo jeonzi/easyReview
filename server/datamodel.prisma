@@ -1,0 +1,23 @@
+type Book {
+  id: ID! @id
+  title: String!
+  isbn: String! @unique
+  image: String!
+  author: String!
+  publisher: String!
+  pubdate: DateTime!
+  description: String!
+  reviews: [Review!]! @relation(name: "BookReviews", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Review {
+  id: ID! @id
+  subject: String!
+  contents: String!
+  image: String!
+  book: Book! @relation(name: "BookReviews", onDelete: SET_NULL)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}

@@ -1,0 +1,29 @@
+type Query {
+    info : String!
+    reviews: [Review!]!
+    searchBooks(title: String!): [Book!]!
+}
+type Mutation {
+  addSearchBooks(title: String): [Book!]!
+  addReview(book_id: String, subject: String, contents: String, image: String): Review!
+}
+
+type Book {
+  id: ID!
+  title: String!
+  isbn: String!
+  image: String!
+  author: String!
+  publisher: String!
+  pubdate: String!
+  description: String!
+  reviews: [Review!]! 
+}
+
+type Review {
+  id: ID!
+  subject: String!
+  contents: String!
+  image: String!
+  book: Book! 
+}
