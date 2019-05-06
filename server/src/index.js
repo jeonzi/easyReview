@@ -1,3 +1,7 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const isAuth = require("./is-auth");
+
 const { GraphQLServer } = require("graphql-yoga");
 const { prisma } = require("./generated/prisma-client");
 const { getBooks } = require("./naverBookByTitle");
@@ -31,6 +35,26 @@ const createBooksByNaver = async title => {
 const resolvers = {
   Query: {
     info: () => `This is my bookReview_API`,
+    loginUser: async (root, args, context) => {
+      const user = await context.prisma.users({ where: { email: args.email } });
+      console.log(user);
+      console.log(user[0].password);
+      if (!user) {
+        alert("Not Existing User");
+      }
+      const isEqual = await bcrypt.compare(args.password, user[0].password);
+      if (!isEqual) {
+        throw new Error("Please check your password 🙏");
+      }
+      const token = jwt.sign(
+        { userId: user[0].id, email: user[0].email },
+        "supersupersecretekey",
+        {
+          expiresIn: "12h"
+        }
+      );
+      return token;
+    },
     reviews: async (root, args, context, info) => {
       return await context.prisma.reviews({ orderBy: "createdAt_DESC" });
     },
@@ -61,6 +85,22 @@ const resolvers = {
     }
   },
   Mutation: {
+    createUser: async (root, args, context, info) => {
+      const userExists = await context.prisma.$exists.user({
+        email: args.email
+      });
+      if (userExists) {
+        throw new Error("Already exists. Please Cheack your email address");
+      }
+      const hashedPassword = await bcrypt.hash(args.password, 12);
+      user = await prisma.createUser({
+        username: args.username,
+        email: args.email,
+        password: hashedPassword
+      });
+      return user;
+    },
+
     addSearchBooks: async (root, args, context, info) => {
       let books = [];
       books = await createBooksByNaver(args.title);
@@ -73,8 +113,7 @@ const resolvers = {
         image: args.image,
         book: { connect: { id: args.book_id } }
       });
-      // review = await
-      console.log(review);
+      // console.log(review);
       return review;
     }
   },

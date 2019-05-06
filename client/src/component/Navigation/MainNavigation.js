@@ -25,7 +25,7 @@ const LinkStyledButton = styled(LinkStyled)`
   &:hover,
   &.active {
     background: #ffffff;
-    color: #892971;
+    color: #364da2;
     border-radius: 10px;
   }
 `;
@@ -36,20 +36,13 @@ const Header = styled.div`
   top: 0;
   width: 100%;
   height: 3.5rem;
-  background: #833ab4; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #833ab4,
-    #fd1d1d,
-    #fcb045
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #833ab4,
-    #fd1d1d,
-    #fcb045
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  background-image: linear-gradient(
+    60deg,
+    #3d3393 0%,
+    #2b76b9 37%,
+    #2cacd1 65%,
+    #35eb93 100%
+  );
   display: flex;
   padding: 0 1.2rem;
   align-items: center;
@@ -65,8 +58,9 @@ const Logo = styled.div`
 `;
 
 const Nav = styled.div`
-  margin-left: 0.5rem;
+  margin-left: 0.3rem;
   z-index: 10;
+  font-size: 0.6rem;
 `;
 
 const NavList = styled.ul`
@@ -84,7 +78,7 @@ const NavItem = styled.li`
 const mainNavigation = () => (
   <Header>
     <Logo>
-      <h1>I READ IT</h1>
+      <h1>AllREAD_I</h1>
     </Logo>
     <Nav>
       <NavList>

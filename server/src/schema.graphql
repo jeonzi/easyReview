@@ -2,10 +2,21 @@ type Query {
     info : String!
     reviews: [Review!]!
     searchBooks(title: String!): [Book!]!
+    loginUser(email: String!, password: String!) : String!
 }
+
 type Mutation {
   addSearchBooks(title: String): [Book!]!
   addReview(book_id: String, subject: String, contents: String, image: String): Review!
+  createUser(username: String!, email: String!, password: String!) : User!
+}
+
+type User {
+  id: ID! 
+  username: String! 
+  email: String! 
+  password: String! 
+  reviews: [Review!]! 
 }
 
 type Book {

@@ -2,28 +2,14 @@ import React from "react";
 
 import "./Loader.css";
 
-// const loader = () => (
-//   <div className="lds-spinner">
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//     <div />
-//   </div>
-// );
-
 const loader = () => (
-  <div class="loader book">
-    <figure class="page" />
-    <figure class="page" />
-    <figure class="page" />
+  <div className="loader">
+    <div className="lds-ellipsis">
+      <div />
+      <div />
+      <div />
+      <div />
+    </div>
   </div>
 );
 

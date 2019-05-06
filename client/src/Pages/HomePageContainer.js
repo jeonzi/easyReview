@@ -1,7 +1,7 @@
 import React from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
-import Loader from "./component/LoaderSpinner/Loader";
+import Loader from "../component/LoaderSpinner/Loader";
 import styled from "styled-components";
 
 const Container = styled.div`

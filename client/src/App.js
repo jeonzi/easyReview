@@ -1,8 +1,9 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import HomePageContainer from "./HomePageContainer";
-import PostReviewContainer from "./PostReviewContainer";
+import HomePageContainer from "./Pages/HomePageContainer";
+import PostReviewContainer from "./Pages/PostReviewContainer";
 import MainNavigation from "./component/Navigation/MainNavigation";
+import AuthContainer from "./Pages/AuthContainer";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -19,6 +20,7 @@ const App = props => {
       <Switch>
         <Route exact path="/main" component={HomePageContainer} />
         <Route path="/post_review" component={PostReviewContainer} />
+        <Route path="/auth" component={AuthContainer} />
       </Switch>
       <GlobalStyle />
     </React.Fragment>

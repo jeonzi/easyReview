@@ -10,9 +10,13 @@ import App from "./App";
 const httpLink = createHttpLink({
   uri: "http://localhost:4000"
 });
+
 const client = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache()
+  // headers: {
+  //   Authorization: `Bearer ${token}`
+  // }
 });
 
 ReactDOM.render(

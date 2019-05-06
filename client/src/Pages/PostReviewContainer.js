@@ -1,14 +1,23 @@
 import React, { useState, useRef } from "react";
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
-import { uploadPic } from "./uploadUserPicTolBB";
+import { uploadPic } from "../uploadUserPicTolBB";
 import { Link } from "react-router-dom";
-import Loader from "./component/LoaderSpinner/Loader";
+import Loader from "../component/LoaderSpinner/Loader";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faPencilAlt,
+  faTimesCircle
+} from "@fortawesome/free-solid-svg-icons";
 
 // Styled-Components
+const MainContainer = styled.div`
+  justify-content: center;
+  align-items: center;
+  t
+`;
 const InputBox = styled.div`
   position: relative;
   justify-content: center;
@@ -25,10 +34,11 @@ const InputSearch = styled.input.attrs({
   type: "text",
   placeholder: "Book Title"
 })`
-  padding: 0.75rem 1.5rem;
-  width: 80%;
-  font-family: fa5-proxima-nova, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  width: 75%;
   font-size: 100%;
+  font-weight: bold;
   border-width: 0.125rem;
   border-color: #f1f3f5;
   outline-offset: -2px;
@@ -39,9 +49,10 @@ const InputSearch = styled.input.attrs({
   z-index: 1;
   position: relative;
   :focus {
-    border-color: #5089de;
+    border-color: #2c82be;
     border-radius: 999px;
     outline: none;
+    box-shadow: 0 0 5px rgba(66, 175, 247, 1);
   }
 `;
 
@@ -51,17 +62,38 @@ const SearchButton = styled.button`
   line-height: 1.15;
   align-items: flex-start;
   text-align: center;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
   cursor: pointer;
   border: none;
   background-color: #f1f3f5;
   display: block;
   box-sizing: inherit;
   text-transform: none;
-  align-items: flex-start;
   position: relative;
   z-index: 2;
   left: -2.7rem;
+  outline: none;
+`;
+
+const ResetButton = styled.button`
+  font-size: 100%;
+  overflow: visible;
+  line-height: 1.15;
+  align-items: flex-start;
+  text-align: center;
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border: none;
+  background-color: #f1f3f5;
+  display: block;
+  box-sizing: inherit;
+  text-transform: none;
+  position: relative;
+  z-index: 3;
+  left: -2.7rem;
+  outline: none;
 `;
 
 const Container = styled.div`
@@ -70,12 +102,12 @@ const Container = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin: 0px auto;
-  padding: 16px 0px;
+  padding: 1rem 1rem;
 `;
 
 const BookWrapper = styled.div`
-  margin: 0px 8px 8px;
-  width: 416.695px;
+  margin: 0.5rem;
+  width: 400px;
   cursor: pointer;
   display: flex;
   flex-wrap: nowrap;
@@ -91,14 +123,14 @@ const PhotoContainer = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
-  vertical-align: middle;
   justify-content: center;
+  line-height: 1.15;
 `;
 
 const Photo = styled.img`
-  height: 95%;
+  height: 90%;
   object-fit: fill;
-  width: 95%;
+  width: 90%;
   vertical-align: middle;
   border-style: none;
   border-radius: 5px;
@@ -107,7 +139,7 @@ const Photo = styled.img`
 const BookDetail = styled.div`
   background: white;
   color: black;
-  padding: 12px 16px;
+  padding: 8px 16px;
   height: 135px;
   box-sizing: border-box;
   border-radius: 5px;
@@ -117,20 +149,87 @@ const BookDetail = styled.div`
   text-overflow: ellipsis;
 `;
 
-const Title = styled.span`
+const Title = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-bottom: 5px;
 `;
 
-const AuthPub = styled.span`
+const Author = styled.div`
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-overflow: ellipisis;
+  white-space: nowrap;
+  margin: 3px auto;
+`;
+
+const Publisher = styled.div`
   font-size: 1rem;
   overflow: hidden;
   text-overflow: ellipisis;
   white-space: nowrap;
+  margin: 3px auto;
 `;
+
+const ReviewButton = styled.div`
+  font-size: 90%;
+  color: #87818c;
+  overflow: visible;
+  line-height: 1.15;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  border: none;
+  background-color: #fff;
+  display: block;
+  text-align: right;
+  position: relative;
+`;
+
+const WriteReview = styled.div`
+  width: 80%
+  padding: 1.5rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border: 1px solid #898888;
+  border-radius: 5px;
+  position: absolute;
+  left: 9%;
+`;
+
+const Label = styled.label`
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  margin-right: 0.7rem;
+  text-align: left;
+`;
+
+const Input = styled.input`
+  margin: 0.5rem 0;
+  padding: 0.75rem 0.7rem;
+  width: 75%;
+  font-size: 100%;
+  border-right: 0px;
+  border-top: 0px;
+  boder-left: 0px;
+  border: none;
+  ouutline: none;
+  cursor: text;
+  box-shadow: none;
+`;
+
+const InputContents = styled.textarea`
+  margin-bottom: 0.5rem 0;
+  padding: 0.75rem;
+  font-size: 100%;
+  width: 75%;
+  height: 75%;
+  vertical-align: top;
+`;
+
 // Apollo Query
 const SEARCH_BOOKS = gql`
   query searchBooks($title: String!) {
@@ -198,6 +297,7 @@ const PostReviewContainer = ({ history }) => {
   const titleInput = useRef();
   const [bookId, setBookId] = useState("");
   const [image, setImage] = useState("");
+  // const [isImage, setIsImage] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const subjectInput = useRef();
   const contentsInput = useRef();
@@ -249,11 +349,13 @@ const PostReviewContainer = ({ history }) => {
   };
 
   console.log(imageUrl, bookId);
-  console.log(subject, contents);
+  console.log(image);
+  // console.log(typeof image);
+  // console.log(subject, contents);
   // console.log(isReview);
 
   return (
-    <div>
+    <MainContainer>
       <form onSubmit={search}>
         <InputBox>
           <InputSearch ref={titleInput} />
@@ -262,55 +364,74 @@ const PostReviewContainer = ({ history }) => {
               <FontAwesomeIcon icon={faSearch} />
             </SearchButton>
           )}
-          {isBook && <button onClick={resetSearch}>더 보기</button>}
+          {isBook && (
+            <ResetButton onClick={resetSearch}>
+              <FontAwesomeIcon icon={faTimesCircle} />
+            </ResetButton>
+          )}
         </InputBox>
       </form>
       {isBook && (
-        <div>
+        <WriteReview>
           <form onChange={getReview}>
-            <div>
-              <label htmlFor="subject">독후감 제목</label>
-              <input type="text" ref={subjectInput} />
-            </div>
-            <div>
-              <label htmlFor="contents">내용</label>
-              <textarea
+            <InputBox>
+              <Label htmlFor="subject">제목 :</Label>
+              <Input
+                type="text"
+                placeholder="Review title"
+                id="subject"
+                ref={subjectInput}
+              />
+            </InputBox>
+            <InputBox>
+              <Label htmlFor="phrase">글귀 :</Label>
+              <Input
+                type="text"
+                placeholder="Impressive phrases"
+                id="phrase"
+                disabled
+              />
+            </InputBox>
+            <InputBox>
+              <Label htmlFor="contents">내용 :</Label>
+              <InputContents
                 name="review"
-                id="mola"
-                cols="60"
+                id="contents"
                 rows="10"
                 ref={contentsInput}
               />
-            </div>
+            </InputBox>
           </form>
-          <input type="file" onChange={getImageFile} />
-          <button onClick={uploadImageFile}>사진 올리기</button>
-          {isReview && (
-            <Mutation
-              mutation={ADD_REVIEW}
-              variables={{
-                subject: subject,
-                book_id: bookId,
-                contents: contents,
-                image: imageUrl
-              }}
-              onCompleted={() => {
-                history.push("/main");
-              }}
-              refetchQueries={[{ query: READ_REVIEWS }]}
-            >
-              {(addReview, { loading, error }) => {
-                if (loading) return <Loader />;
-                if (error) return <div>에러다아아아아아아!!!!!!</div>;
-                return (
-                  <Link to="/main">
-                    <button onClick={addReview}>등록</button>
-                  </Link>
-                );
-              }}
-            </Mutation>
-          )}
-        </div>
+          <InputBox>
+            <Input type="file" onChange={getImageFile} />
+            <button onClick={uploadImageFile}>사진 업로드</button>
+            {isReview && (
+              <Mutation
+                mutation={ADD_REVIEW}
+                variables={{
+                  subject: subject,
+                  book_id: bookId,
+                  contents: contents,
+                  image: imageUrl
+                }}
+                onCompleted={() => {
+                  history.push("/main");
+                }}
+                refetchQueries={[{ query: READ_REVIEWS }]}
+              >
+                {(addReview, { loading, error }) => {
+                  if (loading) return <Loader />;
+                  if (error) return <div>에러다아아아아아아!!!!!!</div>;
+                  return (
+                    <Link to="/main">
+                      <button onClick={addReview}>등록</button>
+                    </Link>
+                  );
+                }}
+              </Mutation>
+            )}
+          </InputBox>
+        </WriteReview>
       )}
       {isSearching && (
         <Query query={SEARCH_BOOKS} variables={{ title }}>
@@ -331,10 +452,16 @@ const PostReviewContainer = ({ history }) => {
                       </PhotoContainer>
                       <BookDetail>
                         <Title>{book.title}</Title>
-                        <br />
-                        <AuthPub>
-                          {book.author} / {book.publisher}
-                        </AuthPub>
+                        <Author>{book.author}</Author>
+                        <Publisher>{book.publisher}</Publisher>
+                        <ReviewButton
+                          onClick={() => {
+                            chooseBook(book);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPencilAlt} />
+                          &nbsp;리뷰 쓰기
+                        </ReviewButton>
                       </BookDetail>
                     </BookWrapper>
                   );
@@ -368,7 +495,7 @@ const PostReviewContainer = ({ history }) => {
           }}
         </Query>
       )}
-    </div>
+    </MainContainer>
   );
 };
 

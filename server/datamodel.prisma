@@ -1,3 +1,11 @@
+type User {
+  id: ID! @id
+  username: String! 
+  email: String! 
+  password: String! 
+  reviews: [Review!]! @relation(name:"Reviewer", onDelete:SET_NULL)
+}
+
 type Book {
   id: ID! @id
   title: String!
@@ -17,6 +25,7 @@ type Review {
   subject: String!
   contents: String!
   image: String!
+  users: [User!]! @relation(name:"Reviewer", onDelete: CASCADE)
   book: Book! @relation(name: "BookReviews", onDelete: SET_NULL)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
