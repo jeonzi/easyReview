@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { Query, Mutation } from "react-apollo";
-import { Link } from "react-router-dom";
 import gql from "graphql-tag";
 import Loader from "../component/LoaderSpinner/Loader";
 import styled from "styled-components";

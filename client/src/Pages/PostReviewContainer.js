@@ -9,17 +9,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
   faPencilAlt,
-  faTimesCircle
+  faTimesCircle,
+  faAngleDoubleRight
 } from "@fortawesome/free-solid-svg-icons";
 
 // Styled-Components
 const MainContainer = styled.div`
   justify-content: center;
   align-items: center;
-  t
+  text-align: center;
 `;
 const InputBox = styled.div`
+  margin: 0 auto;
   position: relative;
+  max-width: 1000px;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -34,6 +37,7 @@ const InputSearch = styled.input.attrs({
   type: "text",
   placeholder: "Book Title"
 })`
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
   padding: 0.6rem 1.2rem;
   width: 75%;
@@ -63,6 +67,7 @@ const SearchButton = styled.button`
   align-items: flex-start;
   text-align: center;
   padding: 0.5rem 0;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
   border: none;
@@ -83,6 +88,7 @@ const ResetButton = styled.button`
   align-items: flex-start;
   text-align: center;
   padding: 0.5rem 0;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
   border: none;
@@ -93,6 +99,27 @@ const ResetButton = styled.button`
   position: relative;
   z-index: 3;
   left: -2.7rem;
+  outline: none;
+`;
+
+const MoreButton = styled.button`
+  font-size: 100%;
+  font-weight: bold;
+  letter-spacing: 1px;
+  overflow: visible;
+  line-height: 1.15;
+  align-items: flex-start;
+  text-align: center;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  display: block;
+  box-sizing: inherit;
+  text-transform: none;
+  position: relative;
   outline: none;
 `;
 
@@ -107,6 +134,7 @@ const Container = styled.div`
 
 const BookWrapper = styled.div`
   margin: 0.5rem;
+  min-width: 400px;
   width: 400px;
   cursor: pointer;
   display: flex;
@@ -147,6 +175,7 @@ const BookDetail = styled.div`
   align-items: center;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
 `;
 
 const Title = styled.div`
@@ -228,6 +257,7 @@ const InputContents = styled.textarea`
   width: 75%;
   height: 75%;
   vertical-align: top;
+  font-family: "Nanum Gothic Coding", monospace;
 `;
 
 // Apollo Query
@@ -434,13 +464,21 @@ const PostReviewContainer = ({ history }) => {
         </WriteReview>
       )}
       {isSearching && (
-        <Query query={SEARCH_BOOKS} variables={{ title }}>
+        <Query
+          query={SEARCH_BOOKS}
+          variables={{ title }}
+          notifyOnNetworkStatusChange
+        >
           {({ loading, error, data }) => {
             if (loading) return <Loader />;
             if (error) return <div>Something happened!!!</div>;
             return (
               <Container>
                 {data.searchBooks.map(book => {
+                  let imageUrl = book.image;
+                  if (book.image === "") {
+                    imageUrl = "https://www.gapines.org/images/books.jpg";
+                  }
                   return (
                     <BookWrapper key={book.id}>
                       <PhotoContainer
@@ -448,7 +486,8 @@ const PostReviewContainer = ({ history }) => {
                           chooseBook(book);
                         }}
                       >
-                        <Photo src={book.image} />
+                        {/* <Photo src={book.image} /> */}
+                        <Photo src={imageUrl} />
                       </PhotoContainer>
                       <BookDetail>
                         <Title>{book.title}</Title>
@@ -478,12 +517,20 @@ const PostReviewContainer = ({ history }) => {
                   awaitRefetchQueries
                 >
                   {(addSearchBooks, { loading, error }) => {
-                    if (loading) return <Loader />;
+                    if (loading)
+                      return (
+                        <Container>
+                          <Loader />
+                        </Container>
+                      );
                     if (error) return <div>Error</div>;
                     return (
-                      <div>
-                        <button onClick={addSearchBooks}>더 보기</button>
-                      </div>
+                      <Container>
+                        <MoreButton onClick={addSearchBooks}>
+                          더 보기&nbsp;
+                          <FontAwesomeIcon icon={faAngleDoubleRight} />
+                        </MoreButton>
+                      </Container>
                     );
                   }}
                 </Mutation>
