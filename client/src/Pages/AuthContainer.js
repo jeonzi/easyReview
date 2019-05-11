@@ -222,7 +222,7 @@ const AuthContainer = ({ history }) => {
               {({ loading, error, data }) => {
                 if (loading) return <Loader />;
                 if (error) return <div />;
-                return <div>로그인 성공 {data.loginUser}</div>;
+                return localStorage.setItem("token", data.loginUser);
               }}
             </Query>
           </div>

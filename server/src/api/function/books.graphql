@@ -1,0 +1,7 @@
+type Query {
+    searchBooks(title: String!): [Book!]!
+}
+
+type Mutation {
+    addSearchBooks(title: String): [Book!]!
+}

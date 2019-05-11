@@ -1,0 +1,7 @@
+type Query {
+    reviews: [Review!]!
+}
+
+type Mutation {
+    addReview(book_id: String, subject: String, contents: String, image: String): Review!
+}

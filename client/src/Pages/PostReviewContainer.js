@@ -4,6 +4,7 @@ import { Query, Mutation } from "react-apollo";
 import { uploadPic } from "../uploadUserPicTolBB";
 import { Link } from "react-router-dom";
 import Loader from "../component/LoaderSpinner/Loader";
+import Backdrop from "../component/Backdrop/Backdrop";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -133,7 +134,7 @@ const Container = styled.div`
 `;
 
 const BookWrapper = styled.div`
-  margin: 0.5rem;
+  margin: 0.8rem;
   min-width: 400px;
   width: 400px;
   cursor: pointer;
@@ -165,7 +166,7 @@ const Photo = styled.img`
 `;
 
 const BookDetail = styled.div`
-  background: white;
+  background: rgba(0, 0, 0, 0);
   color: black;
   padding: 8px 16px;
   height: 135px;
@@ -327,7 +328,6 @@ const PostReviewContainer = ({ history }) => {
   const titleInput = useRef();
   const [bookId, setBookId] = useState("");
   const [image, setImage] = useState("");
-  // const [isImage, setIsImage] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const subjectInput = useRef();
   const contentsInput = useRef();
@@ -487,7 +487,14 @@ const PostReviewContainer = ({ history }) => {
                         }}
                       >
                         {/* <Photo src={book.image} /> */}
-                        <Photo src={imageUrl} />
+                        <Photo
+                          src={imageUrl}
+                          onError={e => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://www.gapines.org/images/books.jpg";
+                          }}
+                        />
                       </PhotoContainer>
                       <BookDetail>
                         <Title>{book.title}</Title>

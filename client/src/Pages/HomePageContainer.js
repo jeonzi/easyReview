@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
-import Loader from "../component/LoaderSpinner/Loader";
 import styled from "styled-components";
+
+import Loader from "../component/LoaderSpinner/Loader";
+import Backdrop from "../component/Backdrop/Backdrop";
 
 const MainContainer = styled.div`
   justify-content: center;
@@ -31,7 +33,7 @@ const PhotoContainer = styled.figure`
   overflow: hidden;
   margin: 10px auto;
   border-style: none;
-  border-radius: 3px;
+  border-radius: 10px;
   background-color: white;
 `;
 
@@ -41,7 +43,7 @@ const Photo = styled.img`
   width: 100%;
   vertical-align: middle;
   border-style: none;
-  border-radius: 3px;
+  border-radius: 10px;
   backface-visibility: hidden;
   opacity: 0.8;
 `;
@@ -104,31 +106,15 @@ const READ_REVIEWS = gql`
 `;
 
 const HomePageContainer = () => {
-  // const useHover = () => {
-  //   const [value, setValue] = useState(false);
-  //   const ref = useRef(null);
+  const [isReview, setIsReview] = useState(false);
+  const [rSubject, setRSubject] = useState("");
 
-  //   const handleMouseOver = () => setValue(true);
-  //   const handleMouseOut = () => setValue(false);
+  const chooseReview = review => {
+    setIsReview(true);
+    setRSubject(review.subject);
+  };
 
-  //   useEffect(() => {
-  //     const node = ref.current;
-  //     if (node) {
-  //       node.addEventListener("mouseover", handleMouseOver);
-  //       node.addEventListener("mouseout", handleMouseOut);
-  //       console.log("somethig happened");
-
-  //       return () => {
-  //         node.removeEventListener("mouseover", handleMouseOver);
-  //         node.removeEventListener("mouseout", handleMouseOut);
-  //       };
-  //     }
-  //   }, [ref.current]);
-
-  //   return [ref, value];
-  // };
-
-  // const [hoverRef, isHovered] = useHover();
+  console.log(isReview, rSubject);
 
   return (
     <MainContainer>
@@ -140,14 +126,22 @@ const HomePageContainer = () => {
             <Container>
               {data.reviews.map(review => {
                 return (
-                  <Review>
-                    <PhotoContainer key={review.id}>
-                      <Photo src={review.image} />
-                      <TextContainer>
-                        {review.subject}
-                        <Contents>{review.contents}</Contents>
-                      </TextContainer>
-                    </PhotoContainer>
+                  <Review
+                    key={review.id}
+                    onClick={() => {
+                      chooseReview(review);
+                    }}
+                  >
+                    {isReview && <Backdrop />}
+                    {!isReview && (
+                      <PhotoContainer>
+                        <Photo src={review.image} />
+                        <TextContainer>
+                          {review.subject}
+                          <Contents>{review.contents}</Contents>
+                        </TextContainer>
+                      </PhotoContainer>
+                    )}
                   </Review>
                 );
               })}
@@ -155,53 +149,6 @@ const HomePageContainer = () => {
           );
         }}
       </Query>
-      {/* {!isHovered && (
-        <Query query={READ_REVIEWS}>
-          {({ loading, error, data }) => {
-            if (loading) return <Loader />;
-            if (error) return <div>ERROR!!!!!</div>;
-            return (
-              <Container>
-                {data.reviews.map(review => {
-                  return (
-                    <Review>
-                      <PhotoContainer key={review.id}>
-                        <Photo src={review.image} />
-                        <TextContainer ref={hoverRef}>
-                          {review.subject}
-                          <Contents>{review.contents}</Contents>
-                        </TextContainer>
-                      </PhotoContainer>
-                    </Review>
-                  );
-                })}
-              </Container>
-            );
-          }}
-        </Query>
-      )}
-      {isHovered && (
-        <Query query={READ_REVIEWS}>
-          {({ loading, error, data }) => {
-            if (loading) return <Loader />;
-            if (error) return <div>ERROR!!!!!</div>;
-            return (
-              <Container>
-                {data.reviews.map(review => {
-                  return (
-                    <Review ref={hoverRef}>
-                      <PhotoContainer key={review.id}>
-                        <Photo src={review.image} />
-                        <TextContainer>{review.subject}</TextContainer>
-                      </PhotoContainer>
-                    </Review>
-                  );
-                })}
-              </Container>
-            );
-          }}
-        </Query>
-      )} */}
     </MainContainer>
   );
 };

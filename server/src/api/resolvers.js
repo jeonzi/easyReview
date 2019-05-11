@@ -1,10 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const isAuth = require("./is-auth");
-
-const { GraphQLServer } = require("graphql-yoga");
-const { prisma } = require("./generated/prisma-client");
-const { getBooks } = require("./naverBookByTitle");
+const { prisma } = require("../generated/prisma-client");
+const { getBooks } = require("../naverBookByTitle");
 
 const createBooksByNaver = async title => {
   let books = await getBooks(title);
@@ -32,11 +29,11 @@ const createBooksByNaver = async title => {
 };
 
 // 리졸버
-const resolvers = {
+export const resolvers = {
   Query: {
     info: () => `This is my bookReview_API`,
     loginUser: async (root, args, context) => {
-      const user = await context.prisma.users({ where: { email: args.email } });
+      const user = await prisma.users({ where: { email: args.email } });
       console.log(user);
       console.log(user[0].password);
       if (!user) {
@@ -55,15 +52,15 @@ const resolvers = {
       );
       return token;
     },
-    reviews: async (root, args, context, info) => {
-      return await context.prisma.reviews({ orderBy: "createdAt_DESC" });
+    reviews: async (root, args) => {
+      return await prisma.reviews({ orderBy: "createdAt_DESC" });
     },
-    searchBooks: async (root, args, context, info) => {
+    searchBooks: async (root, args) => {
       let books = [];
       const AND = Array.from(args.title.replace(/ /g, "")).map(word => {
         return { title_contains: word };
       });
-      const booksInDB = await context.prisma.books({
+      const booksInDB = await prisma.books({
         where: { AND }
       });
 
@@ -106,10 +103,7 @@ const resolvers = {
       books = await createBooksByNaver(args.title);
       return books;
     },
-    addReview: async (root, args, req, info) => {
-      // if (!req.isAuth) {
-      //   throw new Error("You need to login");
-      // }
+    addReview: async (root, args, context, info) => {
       review = await prisma.createReview({
         subject: args.subject,
         contents: args.contents,
@@ -131,16 +125,3 @@ const resolvers = {
     }
   }
 };
-
-// GraphQL 서버 OPEN
-const server = new GraphQLServer({
-  typeDefs: "./src/api/model.graphql",
-  resolvers,
-  context: { prisma }
-});
-
-server.express.use(isAuth);
-
-server.start(() =>
-  console.log(`My GraphQL Server is Running on http://localhost:4000`)
-);
