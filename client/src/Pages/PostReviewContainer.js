@@ -4,7 +4,6 @@ import { Query, Mutation } from "react-apollo";
 import { uploadPic } from "../uploadUserPicTolBB";
 import { Link } from "react-router-dom";
 import Loader from "../component/LoaderSpinner/Loader";
-import Backdrop from "../component/Backdrop/Backdrop";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import styled from "styled-components";
 
 import Loader from "../component/LoaderSpinner/Loader";
 import Backdrop from "../component/Backdrop/Backdrop";
+import Modal from "../component/Modal/Modal";
 
 const MainContainer = styled.div`
   justify-content: center;
@@ -90,6 +91,107 @@ const Contents = styled.div`
   }
 `;
 
+const ModalContents = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  width: 100%;
+`;
+
+const ModalImg = styled.img`
+  width: 460px;
+  height: 580px;
+  flex: 1;
+`;
+
+const ContentsBox = styled.div`
+  color: black;
+  padding: 8px 16px;
+  height: 580px;
+  min-width: 460px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  align-items: center;
+  text-align: left;
+  display: block;
+  flex: 1;
+`;
+
+const ReviewBox = styled.div``;
+
+const BookInfo = styled.div`
+  min-width: 400px;
+  width: 47%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+  overflow: hidden;
+  border-top: 1px solid #bbb;
+  position: absolute;
+  bottom: 10px;
+`;
+
+const ImgContainer = styled.div`
+  height: 150px;
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.15;
+`;
+
+const BImg = styled.img`
+  height: 90%;
+  object-fit: fill;
+  width: 90%;
+  vertical-align: middle;
+  border-style: none;
+  border-radius: 5px;
+`;
+
+const BookDetail = styled.div`
+  background: rgba(0, 0, 0, 0);
+  color: black;
+  padding: 8px 16px;
+  height: 135px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  flex: 3.2;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+`;
+
+const Title = styled.div`
+  font-size: 1.5rem;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 5px;
+`;
+
+const Author = styled.div`
+  font-size: 1.3rem;
+  overflow: hidden;
+  text-overflow: ellipisis;
+  white-space: nowrap;
+  margin: 3px auto;
+`;
+
+const Publisher = styled.div`
+  font-size: 1.2rem;
+  overflow: hidden;
+  text-overflow: ellipisis;
+  white-space: nowrap;
+  margin: 3px auto;
+`;
+
 const READ_REVIEWS = gql`
   query reviews {
     reviews {
@@ -100,6 +202,8 @@ const READ_REVIEWS = gql`
       book {
         title
         author
+        image
+        publisher
       }
     }
   }
@@ -108,10 +212,26 @@ const READ_REVIEWS = gql`
 const HomePageContainer = () => {
   const [isReview, setIsReview] = useState(false);
   const [rSubject, setRSubject] = useState("");
+  const [rImage, setRImage] = useState("");
+  const [rContents, setRContents] = useState("");
+  const [bTitle, setBTitle] = useState("");
+  const [bAuthor, setBAuthor] = useState("");
+  const [bImage, setBImage] = useState("");
+  const [bPub, setBPub] = useState("");
 
   const chooseReview = review => {
     setIsReview(true);
     setRSubject(review.subject);
+    setRImage(review.image);
+    setRContents(review.contents);
+    setBTitle(review.book.title.replace(/\(.*\)/, ""));
+    setBAuthor(review.book.author);
+    setBImage(review.book.image);
+    setBPub(review.book.publisher);
+  };
+
+  const closeModal = () => {
+    setIsReview(false);
   };
 
   console.log(isReview, rSubject);
@@ -132,16 +252,13 @@ const HomePageContainer = () => {
                       chooseReview(review);
                     }}
                   >
-                    {isReview && <Backdrop />}
-                    {!isReview && (
-                      <PhotoContainer>
-                        <Photo src={review.image} />
-                        <TextContainer>
-                          {review.subject}
-                          <Contents>{review.contents}</Contents>
-                        </TextContainer>
-                      </PhotoContainer>
-                    )}
+                    <PhotoContainer>
+                      <Photo src={review.image} />
+                      <TextContainer>
+                        {review.subject}
+                        <Contents>{review.contents}</Contents>
+                      </TextContainer>
+                    </PhotoContainer>
                   </Review>
                 );
               })}
@@ -149,6 +266,31 @@ const HomePageContainer = () => {
           );
         }}
       </Query>
+      {isReview && <Backdrop />}
+      {isReview && (
+        <Modal onClose={closeModal}>
+          <ModalContents>
+            <ModalImg src={rImage} />
+            <ContentsBox>
+              <ReviewBox>
+                <h1>{rSubject}</h1>
+                <h2>{rContents}</h2>
+              </ReviewBox>
+
+              <BookInfo>
+                <ImgContainer>
+                  <BImg src={bImage} />
+                </ImgContainer>
+                <BookDetail>
+                  <Title>{bTitle}</Title>
+                  <Author>{bAuthor}</Author>
+                  <Publisher>{bPub}</Publisher>
+                </BookDetail>
+              </BookInfo>
+            </ContentsBox>
+          </ModalContents>
+        </Modal>
+      )}
     </MainContainer>
   );
 };

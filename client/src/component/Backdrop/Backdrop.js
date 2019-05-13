@@ -5,9 +5,9 @@ const BackBlack = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100%
   width: 100%;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba( 0, 0, 0, 0.6);
 `;
 
 const backdrop = () => <BackBlack />;
