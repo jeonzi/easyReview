@@ -93,17 +93,27 @@ const Contents = styled.div`
 
 const ModalContents = styled.div`
   display: flex;
+  flex-wrap: nowrap;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  width: 100%;
+`;
+
+const MImgBox = styled.div`
+  min-width: 460px;
+  max-width: 470px;
+  height: 580px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 `;
 
 const ModalImg = styled.img`
-  width: 460px;
-  height: 580px;
-  flex: 1;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: fill;
 `;
 
 const ContentsBox = styled.div`
@@ -119,19 +129,45 @@ const ContentsBox = styled.div`
   flex: 1;
 `;
 
-const ReviewBox = styled.div``;
+const ReviewBox = styled.div`
+  width: 560px;
+  display: block;
+  margin-top: 1.3rem;
+`;
+
+const Subject = styled.div`
+  font-size: 2.5rem;
+  font-weight: bold;
+  overflow: hidden;
+  letter-spacing: 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 5px;
+  padding-left: 0.5rem;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #bbb;
+  font-family: "East Sea Dokdo", cursive;
+`;
+
+const RContents = styled.div`
+  font-size: 1.4rem;
+  overflow-y: auto;
+  margin: 3px auto;
+  height: 342px;
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+  border-bottom: 1px solid #bbb;
+  font-family: "Noto Serif KR", serif;
+`;
 
 const BookInfo = styled.div`
   min-width: 400px;
-  width: 47%;
+  width: 80%;
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
-  overflow: hidden;
-  border-top: 1px solid #bbb;
-  position: absolute;
-  bottom: 10px;
+  margin: 0;
 `;
 
 const ImgContainer = styled.div`
@@ -145,7 +181,7 @@ const ImgContainer = styled.div`
 `;
 
 const BImg = styled.img`
-  height: 90%;
+  height: 80%;
   object-fit: fill;
   width: 90%;
   vertical-align: middle;
@@ -156,15 +192,16 @@ const BImg = styled.img`
 const BookDetail = styled.div`
   background: rgba(0, 0, 0, 0);
   color: black;
-  padding: 8px 16px;
+  padding: 16px 16px;
   height: 135px;
   box-sizing: border-box;
   border-radius: 5px;
-  flex: 3.2;
+  flex: 3.5;
   align-items: center;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  white-space: nowrap;
 `;
 
 const Title = styled.div`
@@ -173,7 +210,8 @@ const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  font-family: "Nanum Gothic", sans-serif;
 `;
 
 const Author = styled.div`
@@ -182,6 +220,8 @@ const Author = styled.div`
   text-overflow: ellipisis;
   white-space: nowrap;
   margin: 3px auto;
+  margin-bottom: 10px;
+  font-family: "Nanum Gothic", sans-serif;
 `;
 
 const Publisher = styled.div`
@@ -190,6 +230,7 @@ const Publisher = styled.div`
   text-overflow: ellipisis;
   white-space: nowrap;
   margin: 3px auto;
+  font-family: "Nanum Gothic", sans-serif;
 `;
 
 const READ_REVIEWS = gql`
@@ -270,13 +311,14 @@ const HomePageContainer = () => {
       {isReview && (
         <Modal onClose={closeModal}>
           <ModalContents>
-            <ModalImg src={rImage} />
+            <MImgBox>
+              <ModalImg src={rImage} />
+            </MImgBox>
             <ContentsBox>
               <ReviewBox>
-                <h1>{rSubject}</h1>
-                <h2>{rContents}</h2>
+                <Subject>{rSubject}</Subject>
+                <RContents>{rContents}</RContents>
               </ReviewBox>
-
               <BookInfo>
                 <ImgContainer>
                   <BImg src={bImage} />

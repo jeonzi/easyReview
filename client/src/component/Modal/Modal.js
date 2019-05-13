@@ -3,25 +3,33 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 
-const ModalContent = styled.div`
-  max-width: 980px;
-  width: 80%;
-  background: white;
-  top: 20vh;
-  left: 20%;
+const ModalContainer = styled.div`
+  text-align: center;
+  width: 90%;
   position: fixed;
   z-index: 100;
-  display: flex;
-  flex-wrap: wrap;
+  top: 20vh;
+`;
+
+const ModalContent = styled.div`
+  margin: 0 auto;
+  width: 100%;
+  width: 1072px;
+  background: white;
+  height: 595px;
+  left: 10vw;
   box-shadow: 0 2px 8x rgba(242, 239, 239, 0.26);
+  z-index: 100;
+  border-radius: 15px;
 `;
 
 const ButtonBox = styled.div`
-  position: absolute;
-  height: 20px;
-  top: 5px;
-  right: 5px;
   display: inline;
+  padding: 1rem;
+  top: 10px;
+  left: 29rem;
+  position: relative;
+  z-index: 120;
 `;
 
 const Button = styled.button`
@@ -32,23 +40,32 @@ const Button = styled.button`
   outline: none;
 `;
 
-const Content = styled.div``;
+const Content = styled.div`
+  top: 0.5rem;
+  position: absolute;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+`;
 
 const modal = props => (
-  <ModalContent>
-    <Content>{props.children}</Content>
-    <ButtonBox>
-      <Button onClick={props.onClose}>
-        <FontAwesomeIcon icon={faEdit} />
-      </Button>
-      <Button onClick={props.onClose}>
-        <FontAwesomeIcon icon={faTrashAlt} />
-      </Button>
-      <Button onClick={props.onClose}>
-        <FontAwesomeIcon icon={faTimes} />
-      </Button>
-    </ButtonBox>
-  </ModalContent>
+  <ModalContainer>
+    <ModalContent>
+      <ButtonBox>
+        <Button onClick={props.onClose}>
+          <FontAwesomeIcon icon={faEdit} />
+        </Button>
+        <Button onClick={props.onClose}>
+          <FontAwesomeIcon icon={faTrashAlt} />
+        </Button>
+        <Button onClick={props.onClose}>
+          <FontAwesomeIcon icon={faTimes} />
+        </Button>
+      </ButtonBox>
+      <Content>{props.children}</Content>
+    </ModalContent>
+  </ModalContainer>
 );
 
 export default modal;
