@@ -97,13 +97,13 @@ const ModalContents = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
+  border-radius: 10px;
 `;
 
 const MImgBox = styled.div`
   min-width: 460px;
   max-width: 470px;
-  height: 580px;
+  height: 595px;
   align-items: center;
   justify-content: center;
   flex: 1;
@@ -112,13 +112,14 @@ const MImgBox = styled.div`
 const ModalImg = styled.img`
   height: 100%;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 10px 0 0 10px;
   object-fit: fill;
 `;
 
 const ContentsBox = styled.div`
   color: black;
-  padding: 8px 16px;
+  padding: 0 16px;
+  margin-left: 16px;
   height: 580px;
   min-width: 460px;
   box-sizing: border-box;
@@ -136,33 +137,37 @@ const ReviewBox = styled.div`
 `;
 
 const Subject = styled.div`
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-weight: bold;
-  overflow: hidden;
   letter-spacing: 2px;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-bottom: 5px;
   padding-left: 0.5rem;
   padding-bottom: 5px;
-  border-bottom: 1px solid #bbb;
-  font-family: "East Sea Dokdo", cursive;
+  border-bottom: 1px solid #dbd9d9;
+  font-family: "Nanum Gothic", serif;
 `;
 
 const RContents = styled.div`
   font-size: 1.4rem;
-  overflow-y: auto;
+  overflow-y: scroll;
   margin: 3px auto;
   height: 342px;
-  padding-top: 0.5rem;
-  padding-left: 0.5rem;
-  border-bottom: 1px solid #bbb;
-  font-family: "Noto Serif KR", serif;
+  padding: 8px;
+  line-height: 180%;
+  border-bottom: 1px solid #dbd9d9;
+  letter-spacing: 1px;
+  font-family: "Nanum Gothic", serif;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const BookInfo = styled.div`
   min-width: 400px;
-  width: 80%;
+  width: 550px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -171,10 +176,10 @@ const BookInfo = styled.div`
 `;
 
 const ImgContainer = styled.div`
-  height: 150px;
+  height: 140px;
   position: relative;
   display: flex;
-  flex: 1;
+  flex: 0.8;
   align-items: center;
   justify-content: center;
   line-height: 1.15;
@@ -183,7 +188,7 @@ const ImgContainer = styled.div`
 const BImg = styled.img`
   height: 80%;
   object-fit: fill;
-  width: 90%;
+  width: 80%;
   vertical-align: middle;
   border-style: none;
   border-radius: 5px;
@@ -192,25 +197,22 @@ const BImg = styled.img`
 const BookDetail = styled.div`
   background: rgba(0, 0, 0, 0);
   color: black;
-  padding: 16px 16px;
+  padding: 18px 16px;
+  width: 450px;
   height: 135px;
   box-sizing: border-box;
   border-radius: 5px;
   flex: 3.5;
   align-items: center;
   overflow: hidden;
-  text-overflow: ellipsis;
   text-align: left;
-  white-space: nowrap;
 `;
 
 const Title = styled.div`
+  width: 450px;
   font-size: 1.5rem;
   font-weight: bold;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
   font-family: "Nanum Gothic", sans-serif;
 `;
 
@@ -220,7 +222,7 @@ const Author = styled.div`
   text-overflow: ellipisis;
   white-space: nowrap;
   margin: 3px auto;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
   font-family: "Nanum Gothic", sans-serif;
 `;
 

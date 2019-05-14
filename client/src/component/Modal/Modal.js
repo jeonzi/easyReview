@@ -41,10 +41,8 @@ const Button = styled.button`
 `;
 
 const Content = styled.div`
-  top: 0.5rem;
+  top: -0.02rem;
   position: absolute;
-  padding-left: 0.5rem;
-  padding-bottom: 0.5rem;
   display: flex;
   flex-wrap: wrap;
 `;

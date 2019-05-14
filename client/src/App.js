@@ -11,7 +11,11 @@ body {
   margin: 4rem 2.5rem;
   padding: 0;
   font-family: sans-serif;
-}`;
+}
+body::-webkit-scrollbar { 
+  display: none; 
+}
+`;
 
 const App = props => {
   return (
