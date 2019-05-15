@@ -37,8 +37,6 @@ const resolvers = {
     info: () => `This is my bookReview_API`,
     loginUser: async (root, args, context) => {
       const user = await context.prisma.users({ where: { email: args.email } });
-      console.log(user);
-      console.log(user[0].password);
       if (!user) {
         alert("Not Existing User");
       }

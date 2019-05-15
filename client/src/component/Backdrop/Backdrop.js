@@ -10,6 +10,6 @@ const BackBlack = styled.div`
   background: rgba( 0, 0, 0, 0.6);
 `;
 
-const backdrop = () => <BackBlack />;
+const Backdrop = () => <BackBlack />;
 
-export default backdrop;
+export default Backdrop;

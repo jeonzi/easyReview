@@ -4,7 +4,6 @@ import { Query } from "react-apollo";
 import styled from "styled-components";
 
 import Loader from "../component/LoaderSpinner/Loader";
-import Backdrop from "../component/Backdrop/Backdrop";
 import Modal from "../component/Modal/Modal";
 
 const MainContainer = styled.div`
@@ -143,15 +142,15 @@ const Subject = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   padding-left: 0.5rem;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #dbd9d9;
   font-family: "Nanum Gothic", serif;
 `;
 
 const RContents = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   overflow-y: scroll;
   margin: 3px auto;
   height: 342px;
@@ -256,13 +255,15 @@ const HomePageContainer = () => {
   const [isReview, setIsReview] = useState(false);
   const [rSubject, setRSubject] = useState("");
   const [rImage, setRImage] = useState("");
+  const [rIndex, setRIndex] = useState();
   const [rContents, setRContents] = useState("");
   const [bTitle, setBTitle] = useState("");
   const [bAuthor, setBAuthor] = useState("");
   const [bImage, setBImage] = useState("");
   const [bPub, setBPub] = useState("");
+  const [modal, setModal] = useState();
 
-  const chooseReview = review => {
+  const chooseReview = (review, index) => {
     setIsReview(true);
     setRSubject(review.subject);
     setRImage(review.image);
@@ -271,13 +272,16 @@ const HomePageContainer = () => {
     setBAuthor(review.book.author);
     setBImage(review.book.image);
     setBPub(review.book.publisher);
+    setRIndex(index);
   };
 
   const closeModal = () => {
     setIsReview(false);
   };
 
-  console.log(isReview, rSubject);
+  console.log(setModal, modal);
+
+  // console.log(isReview, rSubject);
 
   return (
     <MainContainer>
@@ -287,15 +291,15 @@ const HomePageContainer = () => {
           if (error) return <div>ERROR!!!!!</div>;
           return (
             <Container>
-              {data.reviews.map(review => {
+              {data.reviews.map((review, index) => {
                 return (
                   <Review
                     key={review.id}
                     onClick={() => {
-                      chooseReview(review);
+                      chooseReview(review, index);
                     }}
                   >
-                    <PhotoContainer>
+                    <PhotoContainer onClick={() => setModal(index)}>
                       <Photo src={review.image} />
                       <TextContainer>
                         {review.subject}
@@ -309,10 +313,11 @@ const HomePageContainer = () => {
           );
         }}
       </Query>
-      {isReview && <Backdrop />}
       {isReview && (
-        <Modal onClose={closeModal}>
-          <ModalContents>
+        <Modal
+          {...{ onClose: closeModal, open: rIndex === modal, modal, setModal }}
+        >
+          <ModalContents onClick={e => e.stopPropagation()}>
             <MImgBox>
               <ModalImg src={rImage} />
             </MImgBox>
