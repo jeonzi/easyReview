@@ -251,6 +251,8 @@ const READ_REVIEWS = gql`
   }
 `;
 
+let handleArrowKeys;
+
 const HomePageContainer = () => {
   const [isReview, setIsReview] = useState(false);
   const [rSubject, setRSubject] = useState("");
@@ -279,9 +281,7 @@ const HomePageContainer = () => {
     setIsReview(false);
   };
 
-  console.log(setModal, modal);
-
-  // console.log(isReview, rSubject);
+  console.log(modal);
 
   return (
     <MainContainer>
@@ -291,6 +291,15 @@ const HomePageContainer = () => {
           if (error) return <div>ERROR!!!!!</div>;
           return (
             <Container>
+              {
+                (handleArrowKeys = (modal, setModal) => e => {
+                  console.log(e.key);
+                  if (e.key === "ArrowRight") setModal(modal + 1);
+                  else if (e.key === "ArrowLeft") setModal(modal - 1);
+                  chooseReview(data.reviews[modal], modal);
+                  console.log(data.reviews);
+                })
+              }
               {data.reviews.map((review, index) => {
                 return (
                   <Review
@@ -315,7 +324,13 @@ const HomePageContainer = () => {
       </Query>
       {isReview && (
         <Modal
-          {...{ onClose: closeModal, open: rIndex === modal, modal, setModal }}
+          {...{
+            handleArrowKeys,
+            onClose: closeModal,
+            open: rIndex === modal,
+            modal,
+            setModal
+          }}
         >
           <ModalContents onClick={e => e.stopPropagation()}>
             <MImgBox>

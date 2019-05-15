@@ -116,6 +116,10 @@ const resolvers = {
       });
       // console.log(review);
       return review;
+    },
+    delReview: async (root, args) => {
+      await prisma.deleteReview({ id: args.rId });
+      return `리뷰가 삭제되었습니다.`;
     }
   },
   Review: {

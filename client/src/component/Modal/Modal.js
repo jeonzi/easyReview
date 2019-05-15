@@ -48,42 +48,41 @@ const Content = styled.div`
   flex-wrap: wrap;
 `;
 
-// 방향키( < / > ) 로 모달 제어하기
-const handleArrowKeys = (modal, setModal) => e => {
-  if (e.key === "ArrowRight") setModal(modal + 1);
-  else if (e.key === "ArrowLeft") setModal(modal - 1);
-};
-
-const Modal = ({ open, onClose, children, setModal, modal }) => {
-  if (open) {
-    useEffect(() => {
-      console.log(modal);
-      const handler = handleArrowKeys(modal, setModal);
-      document.addEventListener(`keydown`, handler);
-      return () => document.removeEventListener(`keydown`, handler);
-    });
-    return (
-      <React.Fragment>
-        <Backdrop open={open} onClick={setModal} />
-        <ModalContainer onClick={e => e.stopPropagation()}>
-          <ModalContent>
-            <ButtonBox>
-              <Button onClick={onClose}>
-                <FontAwesomeIcon icon={faEdit} />
-              </Button>
-              <Button onClick={onClose}>
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </Button>
-              <Button onClick={onClose}>
-                <FontAwesomeIcon icon={faTimes} />
-              </Button>
-            </ButtonBox>
-            <Content>{children}</Content>
-          </ModalContent>
-        </ModalContainer>
-      </React.Fragment>
-    );
-  } else return null;
+const Modal = ({
+  handleArrowKeys,
+  open,
+  onClose,
+  children,
+  setModal,
+  modal
+}) => {
+  useEffect(() => {
+    console.log(modal);
+    const handler = handleArrowKeys(modal, setModal);
+    document.addEventListener(`keydown`, handler);
+    return () => document.removeEventListener(`keydown`, handler);
+  });
+  return (
+    <React.Fragment>
+      <Backdrop open={open} onClick={setModal} />
+      <ModalContainer onClick={e => e.stopPropagation()}>
+        <ModalContent>
+          <ButtonBox>
+            <Button onClick={onClose}>
+              <FontAwesomeIcon icon={faEdit} />
+            </Button>
+            <Button onClick={onClose}>
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </Button>
+            <Button onClick={onClose}>
+              <FontAwesomeIcon icon={faTimes} />
+            </Button>
+          </ButtonBox>
+          <Content>{children}</Content>
+        </ModalContent>
+      </ModalContainer>
+    </React.Fragment>
+  );
 };
 
 export default Modal;
