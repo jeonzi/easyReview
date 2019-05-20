@@ -24,6 +24,19 @@ const Review = styled.div`
   margin: 0px 8px 8px;
   width: 400px;
   cursor: pointer;
+  &:hover #hide {
+    opacity: 0;
+  }
+  &:hover #popup {
+    opacity: 1;
+    z-index: 40;
+
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+    transition: opacity 0.35s, transform 0.35s;
+    box-sizing: border-box;
+  }
 `;
 
 const PhotoContainer = styled.figure`
@@ -59,35 +72,74 @@ const TextContainer = styled.figcaption`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  font-family: "Do Hyeon", sans-serif;
-  font-size: 2rem;
-  letter-spacing: 2px;
+  justify-content: center;
+  align-items: center;
   backface-visibility: hidden;
-  text-shadow: 4px 2px 2px gray;
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.6);
     height: 100%;
+    color: rgba(0, 0, 0, 0);
   }
 `;
 
-const Contents = styled.div`
-  display: block;
-  padding: 1rem;
-  margin-top: 1rem;
-  height: 70%;
-  color: rgba(0, 0, 0, 0);
-  text-transform: none;
-  text-shadow: none;
-  font-weight: 500;
-  font-size: 1.5rem;
-  font-family: "Noto Serif KR", serif;
-  &:hover {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    background: rgba(255, 255, 255, 0.8);
-    color: #2f3238;
-    border-radius: 3px;
+const Blockq = styled.blockquote`
+  font-family: Georgia, serif;
+  font-weight: bold;
+  font-size: 2rem;
+  line-height: 2.3;
+  position: relative;
+  padding: 0.5rem;
+  margin-block-start: 0.8em;
+  margin-block-end: 0.8em;
+  margin-inline-start: 37px;
+  margin-inline-end: 37px;
+  opacity: 0;
+
+  &:before,
+  &:after {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.8;
   }
+
+  &:before {
+    content: "“";
+    color: #ffeded;
+    font-size: 5rem;
+    left: -4rem;
+    top: -2rem;
+    opacity: 0.8;
+  }
+  &:after {
+    content: "”";
+    color: #ffeded;
+    font-size: 5rem;
+    right: -4.5rem;
+    bottom: 1rem;
+  }
+`;
+
+const Contents = styled.p`
+  font-family: "East Sea Dokdo", cursive;
+  text-align: center;
+  color: #fff;
+  line-height: 1;
+  font-size: 2.3rem;
+  letter-spacing: 2px;
+  margin-top: 5rem;
+  margin-bottom: 0.7rem;
+  padding: 0;
+  font-weight: lighter;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: noraml;
+  height: 6.7rem;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `;
 
 const ModalContents = styled.div`
@@ -289,6 +341,8 @@ const HomePageContainer = () => {
         {({ loading, error, data }) => {
           if (loading) return <Loader />;
           if (error) return <div>ERROR!!!!!</div>;
+          const reviews = data.reviews;
+          console.log(reviews);
           return (
             <Container>
               {
@@ -296,11 +350,12 @@ const HomePageContainer = () => {
                   console.log(e.key);
                   if (e.key === "ArrowRight") setModal(modal + 1);
                   else if (e.key === "ArrowLeft") setModal(modal - 1);
-                  chooseReview(data.reviews[modal], modal);
-                  console.log(data.reviews);
+                  // else if (e.key === "Escape") setIsReview(false);
+                  chooseReview(reviews[modal], modal);
+                  console.log(reviews);
                 })
               }
-              {data.reviews.map((review, index) => {
+              {reviews.map((review, index) => {
                 return (
                   <Review
                     key={review.id}
@@ -311,8 +366,9 @@ const HomePageContainer = () => {
                     <PhotoContainer onClick={() => setModal(index)}>
                       <Photo src={review.image} />
                       <TextContainer>
-                        {review.subject}
-                        <Contents>{review.contents}</Contents>
+                        <Blockq id="popup">
+                          <Contents>{review.contents}</Contents>
+                        </Blockq>
                       </TextContainer>
                     </PhotoContainer>
                   </Review>
