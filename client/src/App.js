@@ -8,7 +8,7 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 body {
-  margin: 4rem 2.5rem;
+  margin: 4rem 2.5rem 2rem;
   padding: 0;
   font-family: sans-serif;
 }

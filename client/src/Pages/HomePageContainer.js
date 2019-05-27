@@ -317,6 +317,7 @@ const HomePageContainer = () => {
   const [bImage, setBImage] = useState("");
   const [bPub, setBPub] = useState("");
   const [modal, setModal] = useState();
+  const [rId, setRId] = useState("");
 
   const chooseReview = (review, index) => {
     setIsReview(true);
@@ -328,6 +329,7 @@ const HomePageContainer = () => {
     setBImage(review.book.image);
     setBPub(review.book.publisher);
     setRIndex(index);
+    setRId(review.id);
   };
 
   const closeModal = () => {
@@ -382,6 +384,7 @@ const HomePageContainer = () => {
       {isReview && (
         <Modal
           {...{
+            rId,
             handleArrowKeys,
             onClose: closeModal,
             open: rIndex === modal,

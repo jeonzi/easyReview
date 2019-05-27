@@ -221,7 +221,8 @@ const ReviewButton = styled.div`
 const WriteReview = styled.div`
   width: 80%
   max-width: 1000px;
-  margin: 20px auto;
+  height: 750px;
+  margin: 3rem auto;
   padding: 1.5rem 1.5rem;
   justify-content: center;
   align-items: center;
@@ -293,7 +294,6 @@ const InputContents = styled.textarea`
   padding: 0.75rem;
   font-size: 1.2rem;
   width: 75%;
-  height: 200%;
   vertical-align: top;
   line-height: 1.8;
   font-family: "Nanum Myeongjo", serif;
@@ -325,17 +325,28 @@ const PhotoButton = styled.button`
   text-transform: none;
   position: relative;
   outline: none;
+  font-family: "Nanum Myeongjo", serif;
   background-color: #f7f7e6;
-  border: 3px solid #517fe2;
-  border-radius: 10px;
 `;
 
 const UploadButton = styled(PhotoButton)`
-  min-width: 50px;
+  border: none;
+  font-family: "Nanum Myeongjo", serif;
+  text-decoration: underline;
+  text-decoration-color: red;
 `;
 
 const UploadLink = styled(Link)`
   text-decoration: none;
+`;
+
+const SubmitReview = styled(ReviewHeader)`
+  font-size: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0px auto;
+  padding: 1rem 1rem;
 `;
 
 // Apollo Query
@@ -393,6 +404,8 @@ const READ_REVIEWS = gql`
       book {
         title
         author
+        image
+        publisher
       }
     }
   }
@@ -516,32 +529,32 @@ const PostReviewContainer = ({ history }) => {
             </FileLabel>
             <FileInput type="file" id="photo" onChange={getImageFile} />
             <PhotoButton onClick={uploadImageFile}>사진 업로드</PhotoButton>
-            {isReview && (
-              <Mutation
-                mutation={ADD_REVIEW}
-                variables={{
-                  subject: subject,
-                  book_id: bookId,
-                  contents: contents,
-                  image: imageUrl
-                }}
-                onCompleted={() => {
-                  history.push("/main");
-                }}
-                refetchQueries={[{ query: READ_REVIEWS }]}
-              >
-                {(addReview, { loading, error }) => {
-                  if (loading) return <Loader />;
-                  if (error) return <div>에러다아아아아아아!!!!!!</div>;
-                  return (
-                    <UploadLink to="/main">
-                      <UploadButton onClick={addReview}>등록</UploadButton>
-                    </UploadLink>
-                  );
-                }}
-              </Mutation>
-            )}
           </InputBox>
+          <SubmitReview>
+            <Mutation
+              mutation={ADD_REVIEW}
+              variables={{
+                subject: subject,
+                book_id: bookId,
+                contents: contents,
+                image: imageUrl
+              }}
+              onCompleted={() => {
+                history.push("/main");
+              }}
+              refetchQueries={[{ query: READ_REVIEWS }]}
+            >
+              {(addReview, { loading, error }) => {
+                if (loading) return <Loader />;
+                if (error) return <div>에러다아아아아아아!!!!!!</div>;
+                return (
+                  <UploadLink to="/main">
+                    <UploadButton onClick={addReview}>제출하기</UploadButton>
+                  </UploadLink>
+                );
+              }}
+            </Mutation>
+          </SubmitReview>
         </WriteReview>
       )}
       {isSearching && (

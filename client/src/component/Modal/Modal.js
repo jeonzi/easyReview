@@ -7,6 +7,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import Backdrop from "../Backdrop/Backdrop";
 
+const DEL_REVIEW = gql`
+  mutation delReview($rId: String!) {
+    delReview(rId: $rId)
+  }
+`;
+
+const READ_REVIEWS = gql`
+  query reviews {
+    reviews {
+      id
+      subject
+      contents
+      image
+      book {
+        title
+        author
+      }
+    }
+  }
+`;
+
 const ModalContainer = styled.div`
   text-align: center;
   width: 90%;
@@ -53,6 +74,7 @@ const Content = styled.div`
 `;
 
 const Modal = ({
+  rId,
   handleArrowKeys,
   open,
   onClose,
@@ -61,7 +83,6 @@ const Modal = ({
   modal
 }) => {
   useEffect(() => {
-    console.log(modal);
     const handler = handleArrowKeys(modal, setModal);
     document.addEventListener(`keydown`, handler);
     return () => document.removeEventListener(`keydown`, handler);
@@ -76,9 +97,23 @@ const Modal = ({
             <Button onClick={onClose}>
               <FontAwesomeIcon icon={faEdit} />
             </Button>
-            <Button onClick={onClose}>
-              <FontAwesomeIcon icon={faTrashAlt} />
-            </Button>
+            <Mutation
+              mutation={DEL_REVIEW}
+              variables={{ rId: rId }}
+              awaitRefetchQueries
+              refetchQueries={[{ query: READ_REVIEWS }]}
+            >
+              {(delReview, { loading, error }) => {
+                if (loading) return <div>Deleting</div>;
+                if (error) return <div>ERROR</div>;
+                return (
+                  <Button onClick={delReview}>
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </Button>
+                );
+              }}
+            </Mutation>
+
             <Button onClick={onClose}>
               <FontAwesomeIcon icon={faTimes} />
             </Button>
