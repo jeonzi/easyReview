@@ -29,7 +29,6 @@ const Review = styled.div`
   }
   &:hover #popup {
     opacity: 1;
-    z-index: 40;
 
     -webkit-transform: scale3d(1, 1, 1);
     transform: scale3d(1, 1, 1);
@@ -102,6 +101,7 @@ const Blockq = styled.blockquote`
     width: 3rem;
     height: 3rem;
     opacity: 0.8;
+    z-index: 50;
   }
 
   &:before {
@@ -188,15 +188,16 @@ const ReviewBox = styled.div`
 `;
 
 const Subject = styled.div`
-  font-size: 2.3rem;
+  font-size: 2rem;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-bottom: 4px;
   padding-left: 0.5rem;
   padding-bottom: 10px;
+  padding-top: 15px;
   border-bottom: 1px solid #dbd9d9;
   font-family: "Nanum Gothic", serif;
 `;

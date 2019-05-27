@@ -1,4 +1,7 @@
 import React, { useEffect } from "react";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
+
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -27,8 +30,8 @@ const ModalContent = styled.div`
 const ButtonBox = styled.div`
   display: inline;
   padding: 1rem;
-  top: 10px;
-  left: 29rem;
+  top: 8px;
+  left: 29.5rem;
   position: relative;
   z-index: 120;
 `;
@@ -39,6 +42,7 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 1.5rem;
   outline: none;
+  color: #7c7b7b;
 `;
 
 const Content = styled.div`
@@ -62,6 +66,7 @@ const Modal = ({
     document.addEventListener(`keydown`, handler);
     return () => document.removeEventListener(`keydown`, handler);
   });
+
   return (
     <React.Fragment>
       <Backdrop open={open} onClick={setModal} />

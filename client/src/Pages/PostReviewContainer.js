@@ -10,7 +10,8 @@ import {
   faSearch,
   faPencilAlt,
   faTimesCircle,
-  faAngleDoubleRight
+  faAngleDoubleRight,
+  faImage
 } from "@fortawesome/free-solid-svg-icons";
 
 // Styled-Components
@@ -219,14 +220,23 @@ const ReviewButton = styled.div`
 
 const WriteReview = styled.div`
   width: 80%
+  max-width: 1000px;
+  margin: 20px auto;
   padding: 1.5rem 1.5rem;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  border: 1px solid #898888;
   border-radius: 5px;
-  position: absolute;
-  left: 9%;
+  background-color: #f7f7e6;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3),  0 6px 6px rgba(0, 0, 0, 0.23);
+`;
+
+const ReviewHeader = styled.div`
+  font-size: 2rem;
+  padding: 1.2rem;
+  font-family: "Nanum Myeongjo", serif;
+  font-weight: bold;
+  letter-spacing: 5px;
 `;
 
 const Label = styled.label`
@@ -234,30 +244,98 @@ const Label = styled.label`
   margin-bottom: 0.5rem;
   margin-right: 0.7rem;
   text-align: left;
+  font-weight: bold;
+  font-size: 1.25rem;
+  font-family: "Nanum Myeongjo", serif;
 `;
 
 const Input = styled.input`
   margin: 0.5rem 0;
   padding: 0.75rem 0.7rem;
   width: 75%;
-  font-size: 100%;
-  border-right: 0px;
-  border-top: 0px;
-  boder-left: 0px;
-  border: none;
-  ouutline: none;
+  outline: none;
   cursor: text;
   box-shadow: none;
+  background-color: #f7f7e6;
+  border-left: 0px;
+  border-top: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+  font-size: 1.2rem;
+  font-family: "Nanum Myeongjo", serif;
+`;
+
+const FileLabel = styled(Label)`
+  font-size: 2rem;
+  padding: 0.5rem 2.7rem 0.5rem 1.35rem;
+  margin-right: 10px;
+  vertical-align: middle;
+  background-color: #f7f7e6;
+  left: 2.4rem;
+  position: relative;
+  z-index: 2;
+  top: 3px;
+  pointer: cursor;
+`;
+
+const FileInput = styled(Input)`
+  border: none;
+  font-weight: bold;
+  overflow: hidden;
+  position: relative;
+  left: -4.5rem;
+  font-size: 1rem;
+  z-index: 1;
 `;
 
 const InputContents = styled.textarea`
   margin-bottom: 0.5rem 0;
   padding: 0.75rem;
-  font-size: 100%;
+  font-size: 1.2rem;
   width: 75%;
-  height: 75%;
+  height: 200%;
   vertical-align: top;
-  font-family: "Nanum Gothic Coding", monospace;
+  line-height: 1.8;
+  font-family: "Nanum Myeongjo", serif;
+  border-left: 0px;
+  border-top: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+  background-color: #f7f7e6;
+  outline: none;
+  :focus {
+    border: 1px solid #517fe2;
+  }
+`;
+
+const PhotoButton = styled.button`
+  min-width: 115px;
+  font-size: 100%;
+  font-weight: bold;
+  letter-spacing: 1px;
+  overflow: visible;
+  line-height: 1.15;
+  align-items: flex-start;
+  text-align: center;
+  padding: 0.5rem 0.5rem;
+  margin: 0.5rem 0.2rem;
+  cursor: pointer;
+  display: block;
+  box-sizing: inherit;
+  text-transform: none;
+  position: relative;
+  outline: none;
+  background-color: #f7f7e6;
+  border: 3px solid #517fe2;
+  border-radius: 10px;
+`;
+
+const UploadButton = styled(PhotoButton)`
+  min-width: 50px;
+`;
+
+const UploadLink = styled(Link)`
+  text-decoration: none;
 `;
 
 // Apollo Query
@@ -402,12 +480,13 @@ const PostReviewContainer = ({ history }) => {
       </form>
       {isBook && (
         <WriteReview>
+          <ReviewHeader>독후감 쓰기</ReviewHeader>
           <form onChange={getReview}>
             <InputBox>
               <Label htmlFor="subject">제목 :</Label>
               <Input
                 type="text"
-                placeholder="Review title"
+                placeholder="제목을 입력해주세요"
                 id="subject"
                 ref={subjectInput}
               />
@@ -416,7 +495,7 @@ const PostReviewContainer = ({ history }) => {
               <Label htmlFor="phrase">글귀 :</Label>
               <Input
                 type="text"
-                placeholder="Impressive phrases"
+                placeholder="인상적이었던 한 문장을 넣어주세요"
                 id="phrase"
                 disabled
               />
@@ -432,8 +511,11 @@ const PostReviewContainer = ({ history }) => {
             </InputBox>
           </form>
           <InputBox>
-            <Input type="file" onChange={getImageFile} />
-            <button onClick={uploadImageFile}>사진 업로드</button>
+            <FileLabel for="photo">
+              <FontAwesomeIcon icon={faImage} />
+            </FileLabel>
+            <FileInput type="file" id="photo" onChange={getImageFile} />
+            <PhotoButton onClick={uploadImageFile}>사진 업로드</PhotoButton>
             {isReview && (
               <Mutation
                 mutation={ADD_REVIEW}
@@ -452,9 +534,9 @@ const PostReviewContainer = ({ history }) => {
                   if (loading) return <Loader />;
                   if (error) return <div>에러다아아아아아아!!!!!!</div>;
                   return (
-                    <Link to="/main">
-                      <button onClick={addReview}>등록</button>
-                    </Link>
+                    <UploadLink to="/main">
+                      <UploadButton onClick={addReview}>등록</UploadButton>
+                    </UploadLink>
                   );
                 }}
               </Mutation>

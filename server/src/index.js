@@ -118,6 +118,9 @@ const resolvers = {
       return review;
     },
     delReview: async (root, args) => {
+      // if (!req.isAuth) {
+      //   throw new Error("You need to login");
+      // }
       await prisma.deleteReview({ id: args.rId });
       return `리뷰가 삭제되었습니다.`;
     }

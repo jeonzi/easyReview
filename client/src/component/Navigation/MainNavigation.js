@@ -59,7 +59,7 @@ const Logo = styled.div`
 
 const Nav = styled.div`
   margin-left: 0.3rem;
-  z-index: 10;
+  z-index: 10000;
   font-size: 0.6rem;
 `;
 
