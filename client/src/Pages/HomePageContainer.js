@@ -154,9 +154,6 @@ const MImgBox = styled.div`
   justify-content: center;
   flex: 1;
 
-  // &:hover #hide {
-  //   opacity: 0;
-  // }
   &:hover #popup2 {
     opacity: 1;
     -webkit-transform: scale3d(1, 1, 1);

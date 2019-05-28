@@ -233,11 +233,11 @@ const WriteReview = styled.div`
 `;
 
 const ReviewHeader = styled.div`
-  font-size: 2rem;
+  font-size: 2.15rem;
   padding: 1.2rem;
   font-family: "Nanum Myeongjo", serif;
   font-weight: bold;
-  letter-spacing: 5px;
+  letter-spacing: 20px;
 `;
 
 const Label = styled.label`
@@ -246,8 +246,9 @@ const Label = styled.label`
   margin-right: 0.7rem;
   text-align: left;
   font-weight: bold;
-  font-size: 1.25rem;
+  font-size: 1.33rem;
   font-family: "Nanum Myeongjo", serif;
+  letter-spacing: 2px;
 `;
 
 const Input = styled.input`
@@ -267,12 +268,12 @@ const Input = styled.input`
 `;
 
 const FileLabel = styled(Label)`
-  font-size: 2rem;
-  padding: 0.5rem 2.7rem 0.5rem 1.35rem;
+  font-size: 1.8rem;
+  padding: 1rem 2.8rem 0.5rem 1.5rem;
   margin-right: 10px;
   vertical-align: middle;
   background-color: #f7f7e6;
-  left: 2.4rem;
+  left: 2.7rem;
   position: relative;
   z-index: 2;
   top: 3px;
@@ -284,8 +285,8 @@ const FileInput = styled(Input)`
   font-weight: bold;
   overflow: hidden;
   position: relative;
-  left: -4.5rem;
-  font-size: 1rem;
+  left: -4.3rem;
+  font-size: 1.1rem;
   z-index: 1;
 `;
 
@@ -323,6 +324,7 @@ const PhotoButton = styled.button`
   display: block;
   box-sizing: inherit;
   text-transform: none;
+  right: 4.2rem;
   position: relative;
   outline: none;
   font-family: "Nanum Myeongjo", serif;
@@ -334,6 +336,9 @@ const UploadButton = styled(PhotoButton)`
   font-family: "Nanum Myeongjo", serif;
   text-decoration: underline;
   text-decoration-color: red;
+  right: 1rem;
+  margin: 0 auto;
+  letter-spacing: 2px;
 `;
 
 const UploadLink = styled(Link)`
@@ -345,6 +350,7 @@ const SubmitReview = styled(ReviewHeader)`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   margin: 0px auto;
   padding: 1rem 1rem;
 `;
@@ -500,13 +506,13 @@ const PostReviewContainer = ({ history }) => {
       </form>
       {isBook && (
         <WriteReview>
-          <ReviewHeader>독후감 쓰기</ReviewHeader>
+          <ReviewHeader>독후감</ReviewHeader>
           <form onChange={getReview}>
             <InputBox>
               <Label htmlFor="subject">제목 :</Label>
               <Input
                 type="text"
-                placeholder="제목을 입력해주세요"
+                placeholder="독후감 제목을 입력해주세요"
                 id="subject"
                 ref={subjectInput}
               />
