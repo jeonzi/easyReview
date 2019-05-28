@@ -375,6 +375,7 @@ const ADD_REVIEW = gql`
   mutation addReview(
     $book_id: String!
     $subject: String!
+    $phrase: String!
     $contents: String!
     $image: String!
   ) {
@@ -382,10 +383,12 @@ const ADD_REVIEW = gql`
       book_id: $book_id
       subject: $subject
       contents: $contents
+      phrase: $phrase
       image: $image
     ) {
       subject
       contents
+      phrase
       image
       book {
         id
@@ -400,6 +403,7 @@ const READ_REVIEWS = gql`
       id
       subject
       contents
+      phrase
       image
       book {
         title
@@ -424,6 +428,8 @@ const PostReviewContainer = ({ history }) => {
   const [isReview, setIsReview] = useState(false);
   const [subject, setSubject] = useState("");
   const [contents, setContents] = useState("");
+  const phraseInput = useRef();
+  const [rPhrase, setRPhrase] = useState("");
 
   const search = e => {
     e.preventDefault();
@@ -463,6 +469,7 @@ const PostReviewContainer = ({ history }) => {
       setIsReview(true);
       setSubject(subjectInput.current.value);
       setContents(contentsInput.current.value);
+      setRPhrase(phraseInput.current.value);
     } else {
       setIsReview(false);
     }
@@ -505,12 +512,12 @@ const PostReviewContainer = ({ history }) => {
               />
             </InputBox>
             <InputBox>
-              <Label htmlFor="phrase">글귀 :</Label>
+              <Label htmlFor="phrase">문장 :</Label>
               <Input
                 type="text"
                 placeholder="인상적이었던 한 문장을 넣어주세요"
                 id="phrase"
-                disabled
+                ref={phraseInput}
               />
             </InputBox>
             <InputBox>
@@ -528,13 +535,14 @@ const PostReviewContainer = ({ history }) => {
               <FontAwesomeIcon icon={faImage} />
             </FileLabel>
             <FileInput type="file" id="photo" onChange={getImageFile} />
-            <PhotoButton onClick={uploadImageFile}>사진 업로드</PhotoButton>
+            <PhotoButton onClick={uploadImageFile}>사진 올리기</PhotoButton>
           </InputBox>
           <SubmitReview>
             <Mutation
               mutation={ADD_REVIEW}
               variables={{
                 subject: subject,
+                phrase: rPhrase,
                 book_id: bookId,
                 contents: contents,
                 image: imageUrl

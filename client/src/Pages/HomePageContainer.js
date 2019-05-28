@@ -24,9 +24,6 @@ const Review = styled.div`
   margin: 0px 8px 8px;
   width: 400px;
   cursor: pointer;
-  &:hover #hide {
-    opacity: 0;
-  }
   &:hover #popup {
     opacity: 1;
 
@@ -121,7 +118,7 @@ const Blockq = styled.blockquote`
   }
 `;
 
-const Contents = styled.p`
+const Contents = styled.div`
   font-family: "East Sea Dokdo", cursive;
   text-align: center;
   color: #fff;
@@ -134,8 +131,6 @@ const Contents = styled.p`
   font-weight: lighter;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: noraml;
-  height: 6.7rem;
   word-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -158,6 +153,42 @@ const MImgBox = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
+
+  // &:hover #hide {
+  //   opacity: 0;
+  // }
+  &:hover #popup2 {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    -webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
+    transition: opacity 0.35s, transform 0.35s;
+    box-sizing: border-box;
+  }
+`;
+
+const MImgHover = styled.div`
+  background-color: rgba(0, 0, 0, 0);
+  text-align: left;
+  top: 0px;
+  left: 0px;
+  color: #fff;
+  padding: 2rem;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+  box-sizing: border-box;
+  height: 100%;
+  min-width: 460px;
+  max-width: 470px;
+  overflow: hidden;
+  border-radius: 10px 0 0 10px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.85);
+    color: rgba(0, 0, 0, 0);
+  }
 `;
 
 const ModalImg = styled.img`
@@ -179,6 +210,52 @@ const ContentsBox = styled.div`
   text-align: left;
   display: block;
   flex: 1;
+`;
+
+const MBlockq = styled(Blockq)`
+  line-height: 5;
+  &:before,
+  &:after {
+    position: absolute;
+    width: 3rem;
+    height: 10rem;
+    opacity: 0.8;
+    z-index: 50;
+  }
+
+  &:before {
+    content: "“";
+    color: #ffeded;
+    font-size: 5rem;
+    left: -3.2rem;
+    opacity: 0.8;
+    top: -8rem;
+  }
+  &:after {
+    content: "”";
+    color: #ffeded;
+    font-size: 5rem;
+    right: -3.8rem;
+    bottom: -4.5rem;
+  }
+`;
+
+const MContents = styled.div`
+  font-family: "East Sea Dokdo", cursive;
+  text-align: center;
+  color: #fff;
+  line-height: 1.1;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  margin-top: 7rem;
+  margin-botom: -1rem;
+  font-weight: lighter;
+  box-sizing: border-box;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  word-break: break-all;
+  word-wrap: initial; // word-wrap: 박스 가로 영역 넘친 단어 내에서 임의로 줄바꿈
 `;
 
 const ReviewBox = styled.div`
@@ -292,6 +369,7 @@ const READ_REVIEWS = gql`
     reviews {
       id
       subject
+      phrase
       contents
       image
       book {
@@ -312,6 +390,7 @@ const HomePageContainer = () => {
   const [rImage, setRImage] = useState("");
   const [rIndex, setRIndex] = useState();
   const [rContents, setRContents] = useState("");
+  const [rPhrase, setRPhrase] = useState("");
   const [bTitle, setBTitle] = useState("");
   const [bAuthor, setBAuthor] = useState("");
   const [bImage, setBImage] = useState("");
@@ -330,6 +409,7 @@ const HomePageContainer = () => {
     setBPub(review.book.publisher);
     setRIndex(index);
     setRId(review.id);
+    setRPhrase(review.phrase);
   };
 
   const closeModal = () => {
@@ -370,7 +450,7 @@ const HomePageContainer = () => {
                       <Photo src={review.image} />
                       <TextContainer>
                         <Blockq id="popup">
-                          <Contents>{review.contents}</Contents>
+                          <Contents>{review.phrase}</Contents>
                         </Blockq>
                       </TextContainer>
                     </PhotoContainer>
@@ -394,7 +474,12 @@ const HomePageContainer = () => {
         >
           <ModalContents onClick={e => e.stopPropagation()}>
             <MImgBox>
-              <ModalImg src={rImage} />
+              <ModalImg id="hide" src={rImage} />
+              <MImgHover>
+                <MBlockq id="popup2">
+                  <MContents>{rPhrase}</MContents>
+                </MBlockq>
+              </MImgHover>
             </MImgBox>
             <ContentsBox>
               <ReviewBox>

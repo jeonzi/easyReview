@@ -57,7 +57,7 @@ module.exports = {
         isbn: book.isbn,
         image: book.image,
         author: book.author,
-        publisher: book.publisher,
+        publisher: book.publisher.replace(/<b>|<\/b>|\n/g, ""),
         pubdate: [
           book.pubdate.slice(0, 4),
           book.pubdate.slice(4, 6) === "" ||

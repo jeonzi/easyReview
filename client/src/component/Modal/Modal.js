@@ -46,6 +46,7 @@ const ModalContent = styled.div`
   box-shadow: 0 2px 8x rgba(242, 239, 239, 0.26);
   z-index: 100;
   border-radius: 15px;
+  box-shadow: -17px -9px 39px 2px rgba(255, 255, 255, 0.5);
 `;
 
 const ButtonBox = styled.div`
@@ -113,7 +114,6 @@ const Modal = ({
                 );
               }}
             </Mutation>
-
             <Button onClick={onClose}>
               <FontAwesomeIcon icon={faTimes} />
             </Button>

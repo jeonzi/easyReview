@@ -25,6 +25,7 @@ type Review {
   subject: String!
   contents: String!
   image: String!
+  phrase: String! @default(value: "")
   users: [User!]! @relation(name:"Reviewer", onDelete: CASCADE)
   book: Book! @relation(name: "BookReviews", onDelete: SET_NULL)
   createdAt: DateTime! @createdAt

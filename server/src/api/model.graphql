@@ -7,7 +7,7 @@ type Query {
 
 type Mutation {
   addSearchBooks(title: String): [Book!]!
-  addReview(book_id: String, subject: String, contents: String, image: String): Review!
+  addReview(book_id: String, subject: String, phrase: String, contents: String, image: String): Review!
   createUser(username: String!, email: String!, password: String!) : User!
   delReview(rId: String!): String!
 }
@@ -36,6 +36,7 @@ type Review {
   id: ID!
   subject: String!
   contents: String!
+  phrase: String!
   image: String!
   book: Book! 
 }

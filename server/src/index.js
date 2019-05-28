@@ -110,6 +110,7 @@ const resolvers = {
       // }
       review = await prisma.createReview({
         subject: args.subject,
+        phrase: args.phrase,
         contents: args.contents,
         image: args.image,
         book: { connect: { id: args.book_id } }
