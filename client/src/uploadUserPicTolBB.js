@@ -1,3 +1,4 @@
+// 사진 Upload  : 이미지 호스팅 사이트에 이미지를 보내고 반환해주는 url주소만을 DB에 저장한다.
 import Axios from "axios";
 
 const CORS = "https://cors-anywhere.herokuapp.com/";

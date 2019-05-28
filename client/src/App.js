@@ -7,14 +7,14 @@ import AuthContainer from "./Pages/AuthContainer";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-body {
-  margin: 4rem 2.5rem 2rem;
-  padding: 0;
-  font-family: sans-serif;
-}
-body::-webkit-scrollbar { 
-  display: none; 
-}
+  body {
+    margin: 4rem 2.5rem 2rem;
+    padding: 0;
+    font-family: sans-serif;
+  }
+  body::-webkit-scrollbar { 
+    display: none; 
+  }
 `;
 
 const App = props => {

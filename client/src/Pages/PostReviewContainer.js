@@ -2,9 +2,8 @@ import React, { useState, useRef } from "react";
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import { uploadPic } from "../uploadUserPicTolBB";
-import { Link } from "react-router-dom";
 import Loader from "../component/LoaderSpinner/Loader";
-import styled from "styled-components";
+import * as styles from "./Styles/postReviewContainer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -13,347 +12,6 @@ import {
   faAngleDoubleRight,
   faImage
 } from "@fortawesome/free-solid-svg-icons";
-
-// Styled-Components
-const MainContainer = styled.div`
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`;
-const InputBox = styled.div`
-  margin: 0 auto;
-  position: relative;
-  max-width: 1000px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  box-sizing: border-box;
-  position: relative;
-  :focus {
-    border: none;
-    border-color: white;
-  }
-`;
-const InputSearch = styled.input.attrs({
-  type: "text",
-  placeholder: "Book Title"
-})`
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  width: 75%;
-  font-size: 100%;
-  font-weight: bold;
-  border-width: 0.125rem;
-  border-color: #f1f3f5;
-  outline-offset: -2px;
-  border-style: solid;
-  background-color: #f1f3f5;
-  cursor: text;
-  border-radius: 999px;
-  z-index: 1;
-  position: relative;
-  :focus {
-    border-color: #2c82be;
-    border-radius: 999px;
-    outline: none;
-    box-shadow: 0 0 5px rgba(66, 175, 247, 1);
-  }
-`;
-
-const SearchButton = styled.button`
-  font-size: 100%;
-  overflow: visible;
-  line-height: 1.15;
-  align-items: flex-start;
-  text-align: center;
-  padding: 0.5rem 0;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  border: none;
-  background-color: #f1f3f5;
-  display: block;
-  box-sizing: inherit;
-  text-transform: none;
-  position: relative;
-  z-index: 2;
-  left: -2.7rem;
-  outline: none;
-`;
-
-const ResetButton = styled.button`
-  font-size: 100%;
-  overflow: visible;
-  line-height: 1.15;
-  align-items: flex-start;
-  text-align: center;
-  padding: 0.5rem 0;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  border: none;
-  background-color: #f1f3f5;
-  display: block;
-  box-sizing: inherit;
-  text-transform: none;
-  position: relative;
-  z-index: 3;
-  left: -2.7rem;
-  outline: none;
-`;
-
-const MoreButton = styled.button`
-  font-size: 100%;
-  font-weight: bold;
-  letter-spacing: 1px;
-  overflow: visible;
-  line-height: 1.15;
-  align-items: flex-start;
-  text-align: center;
-  padding: 0.5rem 0;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  border: none;
-  background-color: white;
-  display: block;
-  box-sizing: inherit;
-  text-transform: none;
-  position: relative;
-  outline: none;
-`;
-
-const Container = styled.div`
-  width: 90%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 0px auto;
-  padding: 1rem 1rem;
-`;
-
-const BookWrapper = styled.div`
-  margin: 0.8rem;
-  min-width: 400px;
-  width: 400px;
-  cursor: pointer;
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  justify-content: center;
-  border: 1px solid #bbb;
-  border-radius: 5px;
-`;
-
-const PhotoContainer = styled.div`
-  height: 135px;
-  position: relative;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.15;
-`;
-
-const Photo = styled.img`
-  height: 90%;
-  object-fit: fill;
-  width: 90%;
-  vertical-align: middle;
-  border-style: none;
-  border-radius: 5px;
-`;
-
-const BookDetail = styled.div`
-  background: rgba(0, 0, 0, 0);
-  color: black;
-  padding: 8px 16px;
-  height: 135px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  flex: 3.2;
-  align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
-`;
-
-const Title = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 5px;
-`;
-
-const Author = styled.div`
-  font-size: 1.1rem;
-  overflow: hidden;
-  text-overflow: ellipisis;
-  white-space: nowrap;
-  margin: 3px auto;
-`;
-
-const Publisher = styled.div`
-  font-size: 1rem;
-  overflow: hidden;
-  text-overflow: ellipisis;
-  white-space: nowrap;
-  margin: 3px auto;
-`;
-
-const ReviewButton = styled.div`
-  font-size: 90%;
-  color: #87818c;
-  overflow: visible;
-  line-height: 1.15;
-  padding: 0.75rem 0;
-  cursor: pointer;
-  border: none;
-  background-color: #fff;
-  display: block;
-  text-align: right;
-  position: relative;
-`;
-
-const WriteReview = styled.div`
-  width: 80%
-  max-width: 1000px;
-  height: 750px;
-  margin: 3rem auto;
-  padding: 1.5rem 1.5rem;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  border-radius: 5px;
-  background-color: #f7f7e6;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3),  0 6px 6px rgba(0, 0, 0, 0.23);
-`;
-
-const ReviewHeader = styled.div`
-  font-size: 2.15rem;
-  padding: 1.2rem;
-  font-family: "Nanum Myeongjo", serif;
-  font-weight: bold;
-  letter-spacing: 20px;
-`;
-
-const Label = styled.label`
-  display: inline-block;
-  margin-bottom: 0.5rem;
-  margin-right: 0.7rem;
-  text-align: left;
-  font-weight: bold;
-  font-size: 1.33rem;
-  font-family: "Nanum Myeongjo", serif;
-  letter-spacing: 2px;
-`;
-
-const Input = styled.input`
-  margin: 0.5rem 0;
-  padding: 0.75rem 0.7rem;
-  width: 75%;
-  outline: none;
-  cursor: text;
-  box-shadow: none;
-  background-color: #f7f7e6;
-  border-left: 0px;
-  border-top: 0px;
-  border-right: 0px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-  font-size: 1.2rem;
-  font-family: "Nanum Myeongjo", serif;
-`;
-
-const FileLabel = styled(Label)`
-  font-size: 1.8rem;
-  padding: 1rem 2.8rem 0.5rem 1.5rem;
-  margin-right: 10px;
-  vertical-align: middle;
-  background-color: #f7f7e6;
-  left: 2.7rem;
-  position: relative;
-  z-index: 2;
-  top: 3px;
-  pointer: cursor;
-`;
-
-const FileInput = styled(Input)`
-  border: none;
-  font-weight: bold;
-  overflow: hidden;
-  position: relative;
-  left: -4.3rem;
-  font-size: 1.1rem;
-  z-index: 1;
-`;
-
-const InputContents = styled.textarea`
-  margin-bottom: 0.5rem 0;
-  padding: 0.75rem;
-  font-size: 1.2rem;
-  width: 75%;
-  vertical-align: top;
-  line-height: 1.8;
-  font-family: "Nanum Myeongjo", serif;
-  border-left: 0px;
-  border-top: 0px;
-  border-right: 0px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-  background-color: #f7f7e6;
-  outline: none;
-  :focus {
-    border: 1px solid #517fe2;
-  }
-`;
-
-const PhotoButton = styled.button`
-  min-width: 115px;
-  font-size: 100%;
-  font-weight: bold;
-  letter-spacing: 1px;
-  overflow: visible;
-  line-height: 1.15;
-  align-items: flex-start;
-  text-align: center;
-  padding: 0.5rem 0.5rem;
-  margin: 0.5rem 0.2rem;
-  cursor: pointer;
-  display: block;
-  box-sizing: inherit;
-  text-transform: none;
-  right: 4.2rem;
-  position: relative;
-  outline: none;
-  font-family: "Nanum Myeongjo", serif;
-  background-color: #f7f7e6;
-`;
-
-const UploadButton = styled(PhotoButton)`
-  border: none;
-  font-family: "Nanum Myeongjo", serif;
-  text-decoration: underline;
-  text-decoration-color: red;
-  right: 1rem;
-  margin: 0 auto;
-  letter-spacing: 2px;
-`;
-
-const UploadLink = styled(Link)`
-  text-decoration: none;
-`;
-
-const SubmitReview = styled(ReviewHeader)`
-  font-size: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 0px auto;
-  padding: 1rem 1rem;
-`;
 
 // Apollo Query
 const SEARCH_BOOKS = gql`
@@ -483,67 +141,75 @@ const PostReviewContainer = ({ history }) => {
 
   console.log(imageUrl, bookId);
   console.log(image);
+  console.log(isReview);
   // console.log(typeof image);
   // console.log(subject, contents);
   // console.log(isReview);
 
   return (
-    <MainContainer>
+    <styles.MainContainer>
       <form onSubmit={search}>
-        <InputBox>
-          <InputSearch ref={titleInput} />
-          {!isBook && (
-            <SearchButton type="submit">
+        {/* Naver Book API와 연동해서 리뷰 작성할 책(제목으로) 검색하기 */}
+        <styles.InputBox>
+          <styles.InputSearch ref={titleInput} />
+          {!isBook && ( // 선택한 책이 없을 때는 검색 아이콘
+            <styles.SearchButton type="submit">
               <FontAwesomeIcon icon={faSearch} />
-            </SearchButton>
+            </styles.SearchButton>
           )}
-          {isBook && (
-            <ResetButton onClick={resetSearch}>
+          {isBook && ( // 책을 선택한 경우 X 버튼으로 바뀜
+            <styles.ResetButton onClick={resetSearch}>
               <FontAwesomeIcon icon={faTimesCircle} />
-            </ResetButton>
+            </styles.ResetButton>
           )}
-        </InputBox>
+        </styles.InputBox>
       </form>
+
+      {/* 리뷰 작성할 책을 선택할 경우 보여지는 리뷰 작성 Form */}
       {isBook && (
-        <WriteReview>
-          <ReviewHeader>독후감</ReviewHeader>
+        <styles.WriteReview>
+          <styles.ReviewHeader>독후감</styles.ReviewHeader>
           <form onChange={getReview}>
-            <InputBox>
-              <Label htmlFor="subject">제목 :</Label>
-              <Input
+            <styles.InputBox>
+              <styles.Label htmlFor="subject">제목 :</styles.Label>
+              <styles.Input
                 type="text"
                 placeholder="독후감 제목을 입력해주세요"
                 id="subject"
                 ref={subjectInput}
               />
-            </InputBox>
-            <InputBox>
-              <Label htmlFor="phrase">문장 :</Label>
-              <Input
+            </styles.InputBox>
+            <styles.InputBox>
+              <styles.Label htmlFor="phrase">문장 :</styles.Label>
+              <styles.Input
                 type="text"
                 placeholder="인상적이었던 한 문장을 넣어주세요"
                 id="phrase"
                 ref={phraseInput}
               />
-            </InputBox>
-            <InputBox>
-              <Label htmlFor="contents">내용 :</Label>
-              <InputContents
+            </styles.InputBox>
+            <styles.InputBox>
+              <styles.Label htmlFor="contents">내용 :</styles.Label>
+              <styles.InputContents
                 name="review"
                 id="contents"
                 rows="10"
                 ref={contentsInput}
               />
-            </InputBox>
+            </styles.InputBox>
           </form>
-          <InputBox>
-            <FileLabel for="photo">
+          <styles.InputBox>
+            <styles.FileLabel for="photo">
               <FontAwesomeIcon icon={faImage} />
-            </FileLabel>
-            <FileInput type="file" id="photo" onChange={getImageFile} />
-            <PhotoButton onClick={uploadImageFile}>사진 올리기</PhotoButton>
-          </InputBox>
-          <SubmitReview>
+            </styles.FileLabel>
+            <styles.FileInput type="file" id="photo" onChange={getImageFile} />
+            <styles.PhotoButton onClick={uploadImageFile}>
+              사진 올리기
+            </styles.PhotoButton>
+          </styles.InputBox>
+
+          {/* 작성한 리뷰를 DB에 저장해주는 mutation: Apollo 클라이언트가 GraphQL과 쉽게 연결해준다 */}
+          <styles.SubmitReview>
             <Mutation
               mutation={ADD_REVIEW}
               variables={{
@@ -554,23 +220,29 @@ const PostReviewContainer = ({ history }) => {
                 image: imageUrl
               }}
               onCompleted={() => {
+                // Mutaion이 완료되면 결과가 /main 페이지로 넘어간다
                 history.push("/main");
               }}
               refetchQueries={[{ query: READ_REVIEWS }]}
+              // mutaion 작동 후 READ_REVIEWS 쿼리를 자동으로 실행해준다 --> 새로 작성한 리뷰가 main 페이지에서 새로고침 하지 않아도 바로 보임
             >
               {(addReview, { loading, error }) => {
                 if (loading) return <Loader />;
                 if (error) return <div>에러다아아아아아아!!!!!!</div>;
                 return (
-                  <UploadLink to="/main">
-                    <UploadButton onClick={addReview}>제출하기</UploadButton>
-                  </UploadLink>
+                  <styles.UploadLink to="/main">
+                    <styles.UploadButton onClick={addReview}>
+                      제출하기
+                    </styles.UploadButton>
+                  </styles.UploadLink>
                 );
               }}
             </Mutation>
-          </SubmitReview>
-        </WriteReview>
+          </styles.SubmitReview>
+        </styles.WriteReview>
       )}
+
+      {/* 책을 NaverApi와 DB속 책 검색 결과를 반화해준다. */}
       {isSearching && (
         <Query
           query={SEARCH_BOOKS}
@@ -581,21 +253,21 @@ const PostReviewContainer = ({ history }) => {
             if (loading) return <Loader />;
             if (error) return <div>Something happened!!!</div>;
             return (
-              <Container>
+              <styles.Container>
                 {data.searchBooks.map(book => {
                   let imageUrl = book.image;
                   if (book.image === "") {
                     imageUrl = "https://www.gapines.org/images/books.jpg";
                   }
                   return (
-                    <BookWrapper key={book.id}>
-                      <PhotoContainer
+                    <styles.BookWrapper key={book.id}>
+                      <styles.PhotoContainer
                         onClick={() => {
                           chooseBook(book);
                         }}
                       >
                         {/* <Photo src={book.image} /> */}
-                        <Photo
+                        <styles.Photo
                           src={imageUrl}
                           onError={e => {
                             e.target.onerror = null;
@@ -603,23 +275,25 @@ const PostReviewContainer = ({ history }) => {
                               "https://www.gapines.org/images/books.jpg";
                           }}
                         />
-                      </PhotoContainer>
-                      <BookDetail>
-                        <Title>{book.title}</Title>
-                        <Author>{book.author}</Author>
-                        <Publisher>{book.publisher}</Publisher>
-                        <ReviewButton
+                      </styles.PhotoContainer>
+                      <styles.BookDetail>
+                        <styles.Title>{book.title}</styles.Title>
+                        <styles.Author>{book.author}</styles.Author>
+                        <styles.Publisher>{book.publisher}</styles.Publisher>
+                        <styles.ReviewButton
                           onClick={() => {
                             chooseBook(book);
                           }}
                         >
                           <FontAwesomeIcon icon={faPencilAlt} />
                           &nbsp;리뷰 쓰기
-                        </ReviewButton>
-                      </BookDetail>
-                    </BookWrapper>
+                        </styles.ReviewButton>
+                      </styles.BookDetail>
+                    </styles.BookWrapper>
                   );
                 })}
+
+                {/* 검색 결과 원하는 결과가 없을 경우, 다시 naver api에서 찾아 검색 결과를 DB에 저장 */}
                 <Mutation
                   mutation={ADD_SEARCH_BOOKS}
                   variables={{ title }}
@@ -634,30 +308,30 @@ const PostReviewContainer = ({ history }) => {
                   {(addSearchBooks, { loading, error }) => {
                     if (loading)
                       return (
-                        <Container>
+                        <styles.Container>
                           <Loader />
-                        </Container>
+                        </styles.Container>
                       );
                     if (error) return <div>Error</div>;
                     return (
-                      <Container>
-                        <MoreButton onClick={addSearchBooks}>
+                      <styles.Container>
+                        <styles.MoreButton onClick={addSearchBooks}>
                           더 보기&nbsp;
                           <FontAwesomeIcon icon={faAngleDoubleRight} />
-                        </MoreButton>
-                      </Container>
+                        </styles.MoreButton>
+                      </styles.Container>
                     );
                   }}
                 </Mutation>
                 {data.searchBooks.length === 0 && (
                   <div>해당 책이 없습니다.</div>
                 )}
-              </Container>
+              </styles.Container>
             );
           }}
         </Query>
       )}
-    </MainContainer>
+    </styles.MainContainer>
   );
 };
 
